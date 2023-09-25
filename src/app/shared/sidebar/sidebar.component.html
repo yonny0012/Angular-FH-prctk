@@ -6,6 +6,7 @@
       href="#"
       class="list-group-item list-group-action"
       *ngFor="let hist of historial"
+      (click)="buscar( hist )"
       >{{ hist | titlecase }}</a
     >
   </div>

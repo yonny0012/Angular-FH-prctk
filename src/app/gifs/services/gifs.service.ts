@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Gif, SearchGifsResponse } from '../interfaces/gifs.interface';
 
 @Injectable({
@@ -15,7 +15,7 @@ export class GifsService {
   private apiKey: string = 'RQ0bs7bDApCWrfL13XDvxENUE49Q6ULz';
   private _historial: string[] = [];
   // base: string = 'http://localhost:3000';
-  base: string = 'http://api.giphy.com/v1/gifs/search';
+  base: string = 'http://api.giphy.com/v1/gifs';
 
   public resultados: Gif[] = [];
 
@@ -38,12 +38,17 @@ export class GifsService {
         }
       );
     */
+
+    // httparams
+    const params = new HttpParams()
+      .set('api_key', this.apiKey)
+      .set('limit', `${10}`)
+      .set('q', query);
+
     this.http
-      .get<SearchGifsResponse>(
-        `${this.base}?api_key=${this.apiKey}&q=${query}&limit=10`
-      )
+      .get<SearchGifsResponse>(`${this.base}/search`, { params })
       .subscribe((resp) => {
-        console.log(resp.data[0]);
+        // console.log(resp.data[0]);
         query = query.toLowerCase();
         if (!this._historial.includes(query)) {
           this._historial.unshift(query);
